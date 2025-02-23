@@ -62,26 +62,26 @@ public class FaqDropdownGoogleTest {
 
         //  проход по всем вопросам
         for (int i = 0; i < questions.length; i++) {
-            // 5. Получите элемент вопроса
+            // Получить элемент вопроса
             WebElement questionElement = questions[i];
 
-            // 6. Прокрутите страницу к элементу вопроса (если необходимо)
+            //  Проскролить до него
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", questionElement);
 
-            // 7. Кликните на элемент вопроса
+            // Кликнть
             questionElement.click();
 
-            // 8. Получите элемент ответа
+            // Получить элемент ответа
             WebElement answerElement = answers[i];
 
-            // 9. Дождитесь, пока ответ станет видимым
+            // Ожидание видимости ответа
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             wait.until(ExpectedConditions.visibilityOf(answerElement));
 
-            // 10. Получите фактический текст ответа
+            // Получить ответ
             String actualAnswer = answerElement.getText();
 
-            // 11. Проверьте, что ответ отображается и соответствует ожидаемому значению
+            // проверка что отображается нужный текст
             Assert.assertEquals("Ответ на вопрос " + (i + 1) + " не соответствует ожидаемому", expectedAnswers[i], actualAnswer);
         }
     }
