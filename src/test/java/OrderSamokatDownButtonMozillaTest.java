@@ -2,13 +2,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import pageObjects.FormaDlaKogoSamokatWan;
-import pageObjects.FormaObArenda;
-import pageObjects.MainPageSamokat;
+import pageobjects.FormaDlaKogoSamokatWan;
+import pageobjects.FormaObArenda;
+import pageobjects.MainPageSamokat;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -54,18 +52,12 @@ public class OrderSamokatDownButtonMozillaTest  {
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.gecko.driver", "C:\\Program Files\\Mozilla Firefox\\geckodriver.exe"); // Исправленный путь и ключ
+        System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe"); // исправил путь на относительный
 
         driver = new FirefoxDriver();
         driver.get("https://qa-scooter.praktikum-services.ru/");
         mainPageSamokat = new MainPageSamokat(driver);
-        try {
-            WebElement cookieButton = driver.findElement(By.id("rcc-confirm-button"));
-            cookieButton.click();
-        } catch (org.openqa.selenium.NoSuchElementException e) {
-            // Кнопка cookie не найдена, возможно, она уже была принята
-            System.out.println("Кнопка cookie не найдена");
-        }
+        mainPageSamokat.acceptCookies(); // принимаем куки
     }
 
     @Test

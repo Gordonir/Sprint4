@@ -1,4 +1,4 @@
-package pageObjects;
+package pageobjects;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
@@ -25,7 +25,7 @@ public class FormaObArenda {
     private By blackColorCheckbox = By.xpath("//label[@for='black']"); // чек-бокс черный цвет
     private By greyColorCheckbox = By.xpath("//label[@for='grey']"); // чек-бокс серый цвет
     private By comentField = By.xpath("//input[@placeholder='Комментарий для курьера']"); // поле комментарий для курьера
-    private By orderButton = By.xpath("//*[@id=\"root\"]/div/div[2]/div[3]/button[2]");
+    private By orderButton = By.xpath("//div[contains(@class, 'Order_Buttons')]/button[2]"); // клик по кнопке заказать (Исправил локатор)
     private By orderConfirmationMessage = By.xpath("//div[@class='Order_ModalHeader__3FDaJ']"); // Локатор для сообщения об успешном заказе
     private String expectedConfirmationMessage = "Заказ оформлен"; // Ожидаемый текст сообщения// кнопка заказать
     By confirmButton = By.xpath("//button[text()='Да']"); // Кнопка да на форме подверждения

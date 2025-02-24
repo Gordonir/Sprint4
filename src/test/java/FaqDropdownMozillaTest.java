@@ -1,95 +1,61 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import pageObjects.MainPageSamokat;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.openqa.selenium.chrome.ChromeDriver;
+import pageobjects.MainPageSamokat;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collection;
 
+
+@RunWith(Parameterized.class)
 public class FaqDropdownMozillaTest {
+
+    private final int questionIndex;
+    private final String expectedAnswer;
+    private MainPageSamokat mainPageSamokat;
     private WebDriver driver;
-    private MainPageSamokat mainPage;
+
+    public FaqDropdownMozillaTest(int questionIndex, String expectedAnswer) {
+        this.questionIndex = questionIndex;
+        this.expectedAnswer = expectedAnswer;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> testData() {
+        return Arrays.asList(new Object[][] {
+                {0, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
+                {1, "Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим."},
+                {2, "Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30."},
+                {3, "Только начиная с завтрашнего дня. Но скоро станем расторопнее."},
+                {4, "Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010."},
+                {5, "Самокат приезжает к вам с полной зарядкой. Этого хватает на восемь суток — даже если будете кататься без передышек и во сне. Зарядка не понадобится."},
+                {6, "Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои."},
+                {7, "Да, обязательно. Всем самокатов! И Москве, и Московской области."}
+        });
+    }
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.gecko.driver", "C:\\Program Files\\Mozilla Firefox\\geckodriver.exe"); // Исправленный путь и ключ
-
-        driver = new FirefoxDriver();
+        System.setProperty("webdriver.gecko.driver", "drivers/geckodriver.exe");
+        driver = new ChromeDriver();
         driver.get("https://qa-scooter.praktikum-services.ru/");
-        mainPage = new MainPageSamokat(driver);
+        mainPageSamokat = new MainPageSamokat(driver);
+        mainPageSamokat.acceptCookies(); // Принимаем куки
     }
 
     @Test
-    public void testFaqDropdown() {
-
-        WebElement[] questions = {
-                mainPage.getPerviyVopros(),
-                mainPage.getVtoroyVopros(),
-                mainPage.getTretiyVopros(),
-                mainPage.getChetvertyiyVopros(),
-                mainPage.getPiatiyVopros(),
-                mainPage.getShestoyVopros(),
-                mainPage.getSedmoyVopros(),
-                mainPage.getVosmoyVopros()
-        };
-
-
-        WebElement[] answers = {
-                mainPage.getOtvetNaPerviyVopros(),
-                mainPage.getOtvetNaVtoroyVopros(),
-                mainPage.getOtvetNaTretiyVopros(),
-                mainPage.getOtvetNaChetvertyiyVopros(),
-                mainPage.getOtvetNaPiatiyVopros(),
-                mainPage.getOtvetNaShestoyVopros(),
-                mainPage.getOtvetNaSedmoyVopros(),
-                mainPage.getOtvetNaVosmoyVopros()
-        };
-
-
-        String[] expectedAnswers = {
-                mainPage.getExpectedAnswer1(),
-                mainPage.getExpectedAnswer2(),
-                mainPage.getExpectedAnswer3(),
-                mainPage.getExpectedAnswer4(),
-                mainPage.getExpectedAnswer5(),
-                mainPage.getExpectedAnswer6(),
-                mainPage.getExpectedAnswer7(),
-                mainPage.getExpectedAnswer8()
-        };
-
-
-        for (int i = 0; i < questions.length; i++) {
-
-            WebElement questionElement = questions[i];
-
-
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", questionElement);
-
-
-            questionElement.click();
-
-
-            WebElement answerElement = answers[i];
-
-
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            wait.until(ExpectedConditions.visibilityOf(answerElement));
-
-
-            String actualAnswer = answerElement.getText();
-
-
-            Assert.assertEquals("Ответ на вопрос " + (i + 1) + " не соответствует ожидаемому", expectedAnswers[i], actualAnswer);
-        }
+    public void checkFaqAnswer() {
+        mainPageSamokat.clickQuestion(questionIndex);
+        String actualAnswer = mainPageSamokat.getAnswerText(questionIndex);
+        Assert.assertEquals("Ответ на вопрос " + (questionIndex + 1) + " не соответствует ожидаемому", expectedAnswer, actualAnswer);
     }
+
     @After
     public void tearDown() {
         driver.quit();
     }
-
 }

@@ -2,9 +2,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
-import pageObjects.FormaDlaKogoSamokatWan;
-import pageObjects.FormaObArenda;
-import pageObjects.MainPageSamokat;
+import pageobjects.FormaDlaKogoSamokatWan;
+import pageobjects.FormaObArenda;
+import pageobjects.MainPageSamokat;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.junit.runner.RunWith;
@@ -53,7 +53,7 @@ public class OrderSamokatGoogleTest {
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Андрей\\.cache\\selenium\\chromedriver\\win64\\133.0.6943.98\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe"); // исправил путь на относительный
         driver = new ChromeDriver();
         driver.get("https://qa-scooter.praktikum-services.ru/");
         mainPageSamokat = new MainPageSamokat(driver);

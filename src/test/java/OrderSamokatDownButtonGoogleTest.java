@@ -2,13 +2,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
-import pageObjects.FormaDlaKogoSamokatWan;
-import pageObjects.FormaObArenda;
-import pageObjects.MainPageSamokat;
+import pageobjects.FormaDlaKogoSamokatWan;
+import pageobjects.FormaObArenda;
+import pageobjects.MainPageSamokat;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -55,17 +53,11 @@ public class OrderSamokatDownButtonGoogleTest {
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Андрей\\.cache\\selenium\\chromedriver\\win64\\133.0.6943.98\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe"); // исправил путь на относительный
         driver = new ChromeDriver();
         driver.get("https://qa-scooter.praktikum-services.ru/");
         mainPageSamokat = new MainPageSamokat(driver);
-        try {
-            WebElement cookieButton = driver.findElement(By.id("rcc-confirm-button"));
-            cookieButton.click();
-        } catch (org.openqa.selenium.NoSuchElementException e) {
-            // Кнопка cookie не найдена, если уже была принята
-            System.out.println("Кнопка cookie не найдена");
-        }
+        mainPageSamokat.acceptCookies(); // Принимаем куки
     }
 
     @Test
